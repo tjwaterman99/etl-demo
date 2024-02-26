@@ -18,3 +18,13 @@ select
   {source}.data -> 'labels' as labels
 from {source}
 """
+
+flatten_issue_details_stmt = """
+create or replace view {flattened_view_name} as
+select 
+  {source_view_name}.issue_id,
+  {source_view_name}.created_at,
+  details.name as label
+from {source_view_name},
+jsonb_to_recordset({source_view_name}.labels) as details (name varchar)
+"""

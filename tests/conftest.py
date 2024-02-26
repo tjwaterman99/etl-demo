@@ -1,5 +1,6 @@
 import random
 import os
+import time
 from dotenv import load_dotenv
 from pytest import fixture, TempdirFactory
 from pipeline.clients import GitHubClient, PostgresClient
@@ -29,5 +30,5 @@ def target_dir(tmpdir_factory: TempdirFactory):
 
 @fixture(scope='session')
 def target_table():
-    num = round(random.random() * 1e6)
+    num = round(time.time())
     return f"test_issues_{num}"

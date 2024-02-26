@@ -1,7 +1,7 @@
 import json
 from psycopg2 import extras as postgres_helpers
 from pipeline.clients import GitHubClient, PostgresClient
-from pipeline.sql import init_stmt, insert_issue_stmt, parse_issue_details_stmt
+from pipeline.sql import init_stmt, insert_issue_stmt, parse_issue_details_stmt, flatten_issue_details_stmt
 
 
 def extract(client: GitHubClient, repo_owner: str, repo_name: str, target: str):
@@ -33,6 +33,12 @@ def transform(client: PostgresClient, source: str):
         source=source,
         view_name=f"{source}_parsed"
     )
+    f_flattened_issue_details_stmt = flatten_issue_details_stmt.format(
+        source_view_name=f"{source}_parsed",
+        flattened_view_name=f"{source}_flattened"
+    )
     client.execute_stmt(f_parse_issue_details_stmt)
+    client.conn.commit()
+    client.execute_stmt(f_flattened_issue_details_stmt)
     client.conn.commit()
     
