@@ -9,7 +9,8 @@ def extract(client: GitHubClient, repo_owner: str, repo_name: str, target: str):
     issues = client.get_issues(owner=repo_owner, name=repo_name)
     with open(target, 'w') as fh:
         deserialized = [json.dumps(i.raw_data) for i in issues]
-        fh.writelines(deserialized)
+        for line in deserialized:
+            print(line, file=fh)
     return deserialized
 
 
@@ -17,6 +18,7 @@ def load(client: PostgresClient, source: str, target: str):
     print(f"Loading {source} to {target}")
     f_init_stmt = init_stmt.format(table_name=target)
     f_insert_stmt = insert_issue_stmt.format(table_name=target)
+    client.execute_stmt(f'drop table if exists {target} cascade')
     client.execute_stmt(f_init_stmt)
     
     with open(source) as fh:
@@ -37,6 +39,9 @@ def transform(client: PostgresClient, source: str):
         source_view_name=f"{source}_parsed",
         flattened_view_name=f"{source}_flattened"
     )
+
+    client.execute_stmt(f'drop view if exists {source}_flattened')
+    client.execute_stmt(f'drop view if exists {source}_parsed')
     client.execute_stmt(f_parse_issue_details_stmt)
     client.conn.commit()
     client.execute_stmt(f_flattened_issue_details_stmt)
