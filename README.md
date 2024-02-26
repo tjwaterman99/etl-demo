@@ -2,6 +2,21 @@
 
 Demo of a simple ETL proejct
 
+## Usage
+
+```
+python3 -m pipeline --help
+Usage: python -m pipeline [OPTIONS] COMMAND [ARGS]...
+
+Options:
+  --help  Show this message and exit.
+
+Commands:
+  extract    Extract the details of all repo issues
+  load       Load extracted issues into a target Postgres table
+  transform  Run transformations on issues loaded into Postgres
+```
+
 ## Setup
 
 Open the project in a GitHub codespace. The [postCreateCommand](.devcontainer/postCreateCommand.sh) will install various dependencies.
@@ -43,3 +58,9 @@ Run the pipeline tests with pytest.
 ```
 pytest
 ```
+
+## TODO's
+
+- Configurable landing zones (eg support S3 and not just local filesystem, differentiate test / staging / prod)
+- CDC for the issues list, rather than full table refreshes
+- CI for tests
