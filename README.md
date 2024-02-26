@@ -25,7 +25,7 @@ After starting the codespace, create a virtual environment and install the Pytho
 
 ```
 virtualenv .venv
-.venv/bin/pip install . --editable
+.venv/bin/pip install --editable .
 .venv/bin/pip install -r requirements.txt
 ```
 
@@ -34,8 +34,8 @@ Next, start the postgres database and create a role and user.
 ```sh
 sudo service postgresql start
 sudo su postgres
-createdb codespace
-createuser codespace
+createdb vscode
+createuser vscode
 exit
 ```
 

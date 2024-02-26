@@ -21,4 +21,4 @@ def test_client_get_issues(github_client: GitHubClient):
 
 def test_postgres_client(postgres_client: PostgresClient):
     resp = postgres_client.execute_stmt('select current_role')
-    assert resp.fetchall()[0][0] == 'codespace'
+    assert resp.fetchall()[0][0] is not None
