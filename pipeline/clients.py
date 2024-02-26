@@ -1,4 +1,5 @@
 import os
+import psycopg2
 from typing import Optional
 from github import Github
 from github.Auth import Token
@@ -23,4 +24,11 @@ class GitHubClient:
 
 
 class PostgresClient:
-    pass
+    def __init__(self):
+        self.conn = psycopg2.connect()
+
+    def execute_stmt(self, stmt: str, vars = list()):
+        cursor = self.conn.cursor()
+        print(stmt, vars)
+        cursor.execute(stmt, vars)
+        return cursor
