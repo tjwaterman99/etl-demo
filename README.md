@@ -1,6 +1,6 @@
 # etl-demo
 
-Demo of a simple ETL proejct
+Demo of a simple ETL project that extracts GitHub issues and saves them in a Postgres database.
 
 ## Usage
 
